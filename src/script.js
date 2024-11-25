@@ -58,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
         editedResponse = '';
         liveResponse = '';
+        editableBox.innerHTML = editedResponse; //reset box
+        liveBox.textContent = liveResponse;
         let previousEditing = editing;
   
         while (!done) { //stream the response

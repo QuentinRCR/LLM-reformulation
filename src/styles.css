@@ -11,7 +11,13 @@
   }
   
   .editable {
-    border-color: #4caf50;
+    outline: none;
+    cursor: text;
+  }
+
+  .live {
+    outline: none;
+    cursor: default;
   }
   
   button {
