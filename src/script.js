@@ -1,6 +1,8 @@
+// Requirements: Don't use markdown
+
 document.addEventListener('DOMContentLoaded', () => {
     const inputBox = document.querySelector('.input_box');
-    const editableBox = document.querySelector('.editable');
+    const editableBox =   document.querySelector('.editable');
     const liveBox = document.querySelector('.live');
     const reformulateBtn = document.querySelector('.reformulate');
     const cancelBtn = document.querySelector('.cancel');
@@ -31,12 +33,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (controller) controller.abort();
     });
 
+    async function get_chunk(reader,decoder){
+      const { value } = await reader.read();
+      const chunk = JSON.parse(decoder.decode(value, { stream: true }));
+
+      // replace \n by </br>
+      chunk.response = chunk.response.replaceAll('\n','</br>')
+
+      return [chunk.done,chunk.response]
+    }
+
     // Update the editing element to add the content of the text that was generated in the meantime 
     function transfer_from_live_to_editing(){
         editedResponse = editableBox.innerHTML + liveResponse
         editableBox.innerHTML = editedResponse
         liveResponse = ''
-        liveBox.textContent = liveResponse
+        liveBox.innerHTML = liveResponse
     }
   
     async function queryLLM(prompt, model = "llama3:latest") {
@@ -55,17 +67,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const reader = response.body.getReader();
         const decoder = new TextDecoder('utf-8');
         let done = false;
+        let chuck_text = '';
   
         editedResponse = '';
         liveResponse = '';
-        editableBox.innerHTML = editedResponse; //reset box
+        editableBox.textContent = editedResponse; //reset box
         liveBox.textContent = liveResponse;
         let previousEditing = editing;
   
         while (!done) { //stream the response
-          const { value } = await reader.read();
-          const chunk = JSON.parse(decoder.decode(value, { stream: true }));
-          done = chunk.done;
+          [done, chuck_text] = (await get_chunk(reader,decoder))
 
           // if it was in editing mode and it's not the case anymore, put the content
           // of the live element in the editing element
@@ -76,11 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
           // add the generated text to the correct div
           if (!editing) {
-            editedResponse += chunk.response;
+            editedResponse += chuck_text;
             editableBox.innerHTML = editedResponse;
           } else {
-            liveResponse += chunk.response;
-            liveBox.textContent = liveResponse;
+            liveResponse += chuck_text;
+            liveBox.innerHTML = liveResponse;
           }
         }
       } catch (error) {
