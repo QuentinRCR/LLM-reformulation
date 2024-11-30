@@ -8,7 +8,21 @@
 </head>
 <body>
   <div class="App">
-    <div class="input_box" contenteditable="true">Describe Paris</div>
+    <div class="input_section">
+      <div class="options">
+        <div class="model_choise">
+          <span>Model used</span>
+          <form class="model_choice">
+            <input type="radio" id="modelChoice1" name="model_choice" value="gemma2:2b">
+            <label for="modelChoice1">gemma2:2b</label>
+
+            <input type="radio" id="modelChoice2" name="model_choice" value="llama3:latest">
+            <label for="modelChoice2">llama3:latest</label>
+          </form>
+        </div>
+      </div>
+      <div class="input_box" contenteditable="true">Describe Paris</div>
+    </div>
     <button class="reformulate">Reformulate</button>
     <button class="cancel">Cancel</button>
     <div class="output_part">

@@ -8,13 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = document.querySelector('.cancel');
     const toggleEditBtw = document.querySelector('.toggle_edit');
     const copyTextBtw = document.querySelector('.copy_text');
-
   
     let content = '';
     let editedResponse = '';
     let liveResponse = '';
     let controller = null;
     let editing = false;
+
+    document.querySelectorAll('.model_choice input[name="model"]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        const selectedValue = document.querySelector('.model_choice input[name="model"]:checked').value;
+        console.log(selectedValue);
+      });
+    });
 
     editableBox.addEventListener('focus', () => { //toggle editing mode when the edit element is focused
       editing = true;
@@ -29,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
     reformulateBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      queryLLM(inputBox.innerHTML);
+      const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
+      queryLLM(inputBox.innerHTML,model=selected_model);
     });
   
     cancelBtn.addEventListener('click', () => {
