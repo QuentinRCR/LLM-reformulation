@@ -9,18 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleEditBtw = document.querySelector('.toggle_edit');
     const copyTextBtw = document.querySelector('.copy_text');
   
-    let content = '';
     let editedResponse = '';
     let liveResponse = '';
     let controller = null;
     let editing = false;
 
-    document.querySelectorAll('.model_choice input[name="model"]').forEach((radio) => {
-      radio.addEventListener('change', () => {
-        const selectedValue = document.querySelector('.model_choice input[name="model"]:checked').value;
-        console.log(selectedValue);
-      });
-    });
+    const prompt = {
+      "none":"",
+      "reformulate": `Reformule le texte suivant en restant très proche du texte original. Je veux uniquement la réponse, sans aucun commentaire, en texte brute`,
+      "polite_reformulate": `Reformule le texte suivant pour qu'il soit plus poli et avec un peu plus de forme. Ne soit pas trop poli, en gardant le même ton que vous avez voulu. `,
+      "correct": `Réécrit le texte  suivant mot pour mot, en corrigeant les fautes d'ortographe et de grammaire. Je veux uniquement la réponse, sans aucun commentaire, en texte brute`,
+    }
+
+    // force plain text when pasting in the input box
+    inputBox.addEventListener('paste', function (e) {
+      e.preventDefault()
+      var text = e.clipboardData.getData('text/plain').replaceAll("\n","</br>")
+      inputBox.innerHTML = text
+    })
 
     editableBox.addEventListener('focus', () => { //toggle editing mode when the edit element is focused
       editing = true;
@@ -36,7 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     reformulateBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
-      queryLLM(inputBox.innerHTML,model=selected_model);
+      const pre_prompt =prompt[document.querySelector('input[name="action_choice"]:checked').value];
+      text_to_submit = pre_prompt ? `${pre_prompt} \n: ${inputBox.innerHTML}` : inputBox.innerHTML
+      queryLLM(text_to_submit,model=selected_model);
     });
   
     cancelBtn.addEventListener('click', () => {
@@ -51,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     copyTextBtw.addEventListener('click', async ()=>{
         // get the text to copy
-        const text_to_copy = (editedResponse+liveResponse).replaceAll('</br>','\n');
+        const text_to_copy = (editedResponse+liveResponse).replaceAll('</br>','\n').replaceAll('<br>','\n');
 
         // copy it
         navigator.clipboard.writeText(text_to_copy);
