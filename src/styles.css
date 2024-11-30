@@ -1,44 +1,115 @@
-.App {
-    font-family: Arial, sans-serif;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+
+  .App {
+    max-width: 800px;
+    margin: 20px auto;
     padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-    .input_box, .output_box {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 10px 0;
-      min-height: 50px;
+    .input_section {
+      margin-bottom: 20px;
+
+      .options {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        margin-bottom: 10px;
+        row-gap: 20px;
+
+        .model_choice, 
+        .action_type {
+          flex: 1;
+
+          span {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+          }
+
+          form {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+          }
+        }
+      }
+
+      .input_box {
+        min-height: 80px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #f9f9f9;
+      }
     }
-    
-    .editable {
-      outline: none;
-      cursor: text;
-    }
-  
-    .live {
-      outline: none;
-      cursor: default;
-    }
-    
+
     button {
-      margin-right: 10px;
       padding: 10px 20px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 4px;
       cursor: pointer;
-    }
-    
-    button.reformulate {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-    }
-    
-    button.cancel {
-      background-color: #f44336;
-      color: white;
-      border: none;
+      font-weight: bold;
+
+      &.reformulate {
+        background-color: #4caf50;
+        color: #fff;
+      }
+
+      &.cancel {
+        background-color: #f44336;
+        color: #fff;
+      }
+
+      &:hover {
+        opacity: 0.9;
+      }
     }
 
-    .icon{
-      height: 30px;
-      cursor: pointer;
+    .output_part {
+      margin-top: 20px;
+
+      .options {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        gap: 10px;
+
+        .icon {
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+        }
+      }
+
+      .output_box {
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        background-color: #f9f9f9;
+
+        span {
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        .editable{
+          outline: none;
+        }
+      }
+
+      .output_box:focus-within{
+        outline: solid blue;
+      }
     }
   }
+}
