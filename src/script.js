@@ -6,13 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const liveBox = document.querySelector('.live');
     const reformulateBtn = document.querySelector('.reformulate');
     const cancelBtn = document.querySelector('.cancel');
+    const toggleEditBtw = document.querySelector('.toggle_edit');
+    const copyTextBtw = document.querySelector('.copy_text');
+
   
     let content = '';
     let editedResponse = '';
     let liveResponse = '';
     let controller = null;
     let editing = false;
-  
+
     editableBox.addEventListener('focus', () => { //toggle editing mode when the edit element is focused
       editing = true;
     });
@@ -33,11 +36,31 @@ document.addEventListener('DOMContentLoaded', () => {
       if (controller) controller.abort();
     });
 
+    toggleEditBtw.addEventListener('click', ()=>{
+      const is_editable = (editableBox.getAttribute("contenteditable")=="true")
+      editableBox.setAttribute("contenteditable",!is_editable)
+      toggleEditBtw.setAttribute("src",is_editable ? "icons/edit.png" : "icons/noEdit.png")
+    })
+
+    copyTextBtw.addEventListener('click', async ()=>{
+        // get the text to copy
+        const text_to_copy = (editedResponse+liveResponse).replaceAll('</br>','\n');
+
+        // copy it
+        navigator.clipboard.writeText(text_to_copy);
+        
+        // replace the copy icon with a check to show that is copied the text
+        copyTextBtw.setAttribute('src','icons/check.png');
+        await new Promise(x => setTimeout(x,700));
+        copyTextBtw.setAttribute('src','icons/copy.png');
+      }
+    )
+
     async function get_chunk(reader,decoder){
       const { value } = await reader.read();
       const chunk = JSON.parse(decoder.decode(value, { stream: true }));
 
-      // replace \n by </br>
+      // Replace newline characters with <br>
       chunk.response = chunk.response.replaceAll('\n','</br>')
 
       return [chunk.done,chunk.response]

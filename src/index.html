@@ -8,13 +8,19 @@
 </head>
 <body>
   <div class="App">
-    <div class="input_box" contenteditable="true">A \n B</div>
+    <div class="input_box" contenteditable="true">Describe Paris</div>
     <button class="reformulate">Reformulate</button>
     <button class="cancel">Cancel</button>
-    <div class="output_box">
-      <span class="editable" contenteditable="true"></span>
-      <span class="live"></span>
-    </div>
+    <div class="output_part">
+      <div class="options">
+        <img src="icons/noEdit.png" href="editing_icon" class="icon toggle_edit">
+        <img src="icons/copy.png" href="copy text icon" class="icon copy_text">
+      </div>
+      <div class="output_box">
+        <span class="editable" contenteditable="true"></span>
+        <span class="live"></span>
+      </div>
+    </div> 
   </div>
   <script src="script.js"></script>
 </body>

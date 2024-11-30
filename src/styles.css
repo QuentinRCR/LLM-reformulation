@@ -1,40 +1,44 @@
 .App {
     font-family: Arial, sans-serif;
     padding: 20px;
-  }
-  
-  .input_box, .output_box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-    min-height: 50px;
-  }
-  
-  .editable {
-    outline: none;
-    cursor: text;
-  }
 
-  .live {
-    outline: none;
-    cursor: default;
-  }
+    .input_box, .output_box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      min-height: 50px;
+    }
+    
+    .editable {
+      outline: none;
+      cursor: text;
+    }
   
-  button {
-    margin-right: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
+    .live {
+      outline: none;
+      cursor: default;
+    }
+    
+    button {
+      margin-right: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    
+    button.reformulate {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+    }
+    
+    button.cancel {
+      background-color: #f44336;
+      color: white;
+      border: none;
+    }
+
+    .icon{
+      height: 30px;
+      cursor: pointer;
+    }
   }
-  
-  button.reformulate {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-  }
-  
-  button.cancel {
-    background-color: #f44336;
-    color: white;
-    border: none;
-  }
-  
