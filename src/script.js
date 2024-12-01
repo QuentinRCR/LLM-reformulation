@@ -4,10 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputBox = document.querySelector('.input_box');
     const editableBox =   document.querySelector('.editable');
     const liveBox = document.querySelector('.live');
-    const reformulateBtn = document.querySelector('.reformulate');
+    const runBtn = document.querySelector('.run');
     const cancelBtn = document.querySelector('.cancel');
     const toggleEditBtw = document.querySelector('.toggle_edit');
     const copyTextBtw = document.querySelector('.copy_text');
+    const spinner = document.querySelector('.spinner');
   
     let editedResponse = '';
     let liveResponse = '';
@@ -39,12 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   
-    reformulateBtn.addEventListener('click', (e) => {
+    runBtn.addEventListener('click', async (e) => {
       e.preventDefault();
-      const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
-      const pre_prompt =prompt[document.querySelector('input[name="action_choice"]:checked').value];
-      text_to_submit = pre_prompt ? `${pre_prompt} \n: ${inputBox.innerHTML}` : inputBox.innerHTML
-      queryLLM(text_to_submit,model=selected_model);
+      try{
+        spinner.style.display = "grid" // show the spinner 
+        editableBox.innerHTML = ""; // remove existing text
+
+        const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
+        const pre_prompt =prompt[document.querySelector('input[name="action_choice"]:checked').value];
+        text_to_submit = pre_prompt ? `${pre_prompt} \n: ${inputBox.innerHTML}` : inputBox.innerHTML
+        await queryLLM(text_to_submit,model=selected_model);
+      }
+      finally{
+        spinner.style.display = "none" // remove the spinner regardless of what happened 
+      }
     });
   
     cancelBtn.addEventListener('click', () => {
@@ -101,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ model, prompt, stream: true }),
           signal: abortController.signal
         });
-  
+
         const reader = response.body.getReader();
         const decoder = new TextDecoder('utf-8');
         let done = false;
@@ -115,6 +124,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
         while (!done) { //stream the response
           [done, chuck_text] = (await get_chunk(reader,decoder))
+          
+          if (editedResponse==''){
+            // remove the spinner as soon as the text is generating
+            spinner.style.display = "none"
+          }
 
           // if it was in editing mode and it's not the case anymore, put the content
           // of the live element in the editing element

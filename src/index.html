@@ -13,7 +13,7 @@
         <div class="model_choice">
           <span>Model used</span>
           <form>
-            <input type="radio" id="modelChoice1" name="model_choice" value="gemma2:2b">
+            <input checked type="radio" id="modelChoice1" name="model_choice" value="gemma2:2b">
             <label for="modelChoice1">gemma2:2b</label>
 
             <input type="radio" id="modelChoice2" name="model_choice" value="llama3:latest">
@@ -23,7 +23,7 @@
         <div class="action_type">
           <span>Action</span>
           <form>
-            <input type="radio" id="actionChoice1" name="action_choice" value="reformulate">
+            <input checked type="radio" id="actionChoice1" name="action_choice" value="reformulate">
             <label for="actionChoice1">Reformulate</label>
 
             <input type="radio" id="actionChoice2" name="action_choice" value="correct">
@@ -38,7 +38,7 @@
       </div>
       <div class="input_box" contenteditable="true"></div>
     </div>
-    <button class="reformulate">Reformulate</button>
+    <button class="run">Run</button>
     <button class="cancel">Cancel</button>
     <div class="output_part">
       <div class="options">
@@ -46,6 +46,7 @@
         <img src="icons/copy.png" href="copy text icon" class="icon copy_text">
       </div>
       <div class="output_box">
+        <div class="spinner"></div>
         <span class="editable" contenteditable="true"></span>
         <span class="live"></span>
       </div>
