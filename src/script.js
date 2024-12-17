@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
 
         const action_choice = document.querySelector('input[name="action_choice"]:checked').value
-        const pre_prompt = action_choice == "other" ? prePromptInput.value : prompt[action_choise];
+        const pre_prompt = action_choice == "other" ? prePromptInput.value : prompt[action_choice];
         text_to_submit = pre_prompt ? `${pre_prompt} \n: ${inputBox.innerHTML}` : inputBox.innerHTML
         await queryLLM(text_to_submit,model=selected_model);
       }
