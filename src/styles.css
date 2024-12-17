@@ -39,6 +39,22 @@ body {
             gap: 5px;
           }
         }
+
+        .otherInput{
+          display: none;
+          margin-top: 10px;
+          align-items: center;
+
+          div{
+            white-space: nowrap;
+          }
+
+          textarea {
+            margin-left: 10px;
+            width: 100%;
+            height: 1.3em;
+          }
+        }
       }
 
       .input_box {

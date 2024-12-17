@@ -9,16 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleEditBtw = document.querySelector('.toggle_edit');
     const copyTextBtw = document.querySelector('.copy_text');
     const spinner = document.querySelector('.spinner');
-  
+    const otherInputBox = document.querySelector('.otherInput');
+    const selectForm = document.querySelector('.selectForm');
+    const prePromptInput= document.querySelector('.preprompt_input');
+
     let editedResponse = '';
     let liveResponse = '';
     let controller = null;
     let editing = false;
 
     const prompt = {
-      "none":"",
       "reformulate": `Reformule le texte suivant en restant très proche du texte original. Je veux uniquement la réponse, sans aucun commentaire, en texte brute`,
-      "polite_reformulate": `Reformule le texte suivant pour qu'il soit plus poli et avec un peu plus de forme. Ne soit pas trop poli, en gardant le même ton que vous avez voulu. `,
+      "polite_reformulate": `Reformule le texte suivant pour qu'il soit plus poli et avec un peu plus de forme. Ne soit pas trop poli, en gardant le même ton. Je veux que le texte sans aucun commentaire ou formulation markdown`,
       "correct": `Réécrit le texte  suivant mot pour mot, en corrigeant les fautes d'ortographe et de grammaire. Je veux uniquement la réponse, sans aucun commentaire, en texte brute`,
     }
 
@@ -47,7 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
         editableBox.innerHTML = ""; // remove existing text
 
         const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
-        const pre_prompt =prompt[document.querySelector('input[name="action_choice"]:checked').value];
+
+        const action_choice = document.querySelector('input[name="action_choice"]:checked').value
+        const pre_prompt = action_choice == "other" ? prePromptInput.value : prompt[action_choise];
         text_to_submit = pre_prompt ? `${pre_prompt} \n: ${inputBox.innerHTML}` : inputBox.innerHTML
         await queryLLM(text_to_submit,model=selected_model);
       }
@@ -80,6 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     )
 
+    // display or not the "other" input box
+    selectForm.addEventListener('click',(e)=>{
+      clicked_value = e.originalTarget.value
+
+      if (clicked_value){
+        if (clicked_value=='other'){
+          otherInputBox.style.display = 'flex'
+        }
+        else{
+          otherInputBox.style.display = 'none'
+        }
+      }
+    })
+
     async function get_chunk(reader,decoder){
       const { value } = await reader.read();
       const chunk = JSON.parse(decoder.decode(value, { stream: true }));
@@ -106,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const response = await fetch(API_ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json'},
           body: JSON.stringify({ model, prompt, stream: true }),
           signal: abortController.signal
         });

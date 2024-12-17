@@ -22,7 +22,7 @@
         </div>
         <div class="action_type">
           <span>Action</span>
-          <form>
+          <form class="selectForm">
             <input checked type="radio" id="actionChoice1" name="action_choice" value="reformulate">
             <label for="actionChoice1">Reformulate</label>
 
@@ -32,9 +32,13 @@
             <input type="radio" id="actionChoice3" name="action_choice" value="polite_reformulate">
             <label for="actionChoice3">Reformulate politely</label>
 
-            <input type="radio" id="actionChoice4" name="action_choice" value="none">
-            <label for="actionChoice4">None</label>
+            <input type="radio" id="actionChoice4" name="action_choice" value="other">
+            <label for="actionChoice4">Autre</label>
           </form>
+          <div class="otherInput">
+            <div>Pre-prompt</div>
+            <textarea class="preprompt_input"></textarea>
+          </div>
       </div>
       <div class="input_box" contenteditable="true"></div>
     </div>
