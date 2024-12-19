@@ -117,6 +117,10 @@ body {
           outline: none;
         }
 
+        .editable.blocked{
+          cursor: context-menu;
+        }
+
         .spinner {
           width: 50px;
           aspect-ratio: 1;

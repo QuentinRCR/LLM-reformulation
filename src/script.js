@@ -89,6 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const is_editable = (editableBox.getAttribute("contenteditable")=="true")
     editableBox.setAttribute("contenteditable",!is_editable)
     toggleEditBtw.setAttribute("src",is_editable ? "icons/edit.png" : "icons/noEdit.png")
+    
+    // add a class that change the appearance of the cursor
+    if (is_editable){
+      editableBox.classList.add("blocked")
+    }
+    else{
+      editableBox.classList.remove("blocked")
+    }
   })
 
   copyTextBtw.addEventListener('click', async ()=>{
