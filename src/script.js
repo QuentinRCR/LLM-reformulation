@@ -26,10 +26,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // force plain text when pasting in the input box
     inputBox.addEventListener('paste', function (e) {
-      e.preventDefault()
-      var text = e.clipboardData.getData('text/plain').replaceAll("\n","</br>")
-      inputBox.innerHTML = text
-    })
+      e.preventDefault();
+      var text = e.clipboardData.getData('text/plain');
+      
+      // Split the text into lines and convert to nodes
+      var lines = text.split('\n');
+      var fragment = document.createDocumentFragment();
+  
+      lines.forEach((line, index) => {
+          fragment.appendChild(document.createTextNode(line));
+          if (index < lines.length - 1) {
+              fragment.appendChild(document.createElement('br'));
+          }
+      });
+  
+      // Replace the selected text with the new content
+      var selection = window.getSelection();
+      if (selection.rangeCount > 0) {
+          var range = selection.getRangeAt(0);
+          range.deleteContents();
+          range.insertNode(fragment);
+  
+          // Move the caret to the end of the inserted content
+          range.collapse(false);
+          selection.removeAllRanges();
+          selection.addRange(range);
+      }
+    });
 
     editableBox.addEventListener('focus', () => { //toggle editing mode when the edit element is focused
       editing = true;
