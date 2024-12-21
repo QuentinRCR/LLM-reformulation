@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // display or not the "other" input box
   selectForm.addEventListener('click',(e)=>{
-    clicked_value = e.originalTarget.value
+    clicked_value = e.target.defaultValue
 
     if (clicked_value){
       if (clicked_value=='other'){
