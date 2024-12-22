@@ -63,22 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  runBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
-    try{
-      spinner.style.display = "grid" // show the spinner 
-      editableBox.innerHTML = ""; // remove existing text
-
-      const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
-
-      const action_choice = document.querySelector('input[name="action_choice"]:checked').value
-      const pre_prompt = action_choice == "other" ? prePromptInput.value : prompt[action_choice];
-      text_to_submit = pre_prompt ? `${pre_prompt} \n: ${inputBox.innerHTML}` : inputBox.innerHTML
-      await queryLLM(text_to_submit,model=selected_model);
+  // run the reformulation with shift enter
+  inputBox.addEventListener('keydown',(e)=>{
+    if (e.keyCode == 13 && e.shiftKey) {
+      e.preventDefault()
+      query_llm();
     }
-    finally{
-      spinner.style.display = "none" // remove the spinner regardless of what happened 
-    }
+  })
+
+  // run the reformulation when clicking on the button
+  runBtn.addEventListener('click', (e) => {
+    query_llm()
   });
 
   cancelBtn.addEventListener('click', () => {
@@ -126,6 +121,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   })
+
+  // querry the llm with the info gathered on the page
+  async function query_llm(){
+    try{
+      spinner.style.display = "grid" // show the spinner 
+      editableBox.innerHTML = ""; // remove existing text
+
+      const selected_model = document.querySelector('input[name="model_choice"]:checked').value;
+
+      const action_choice = document.querySelector('input[name="action_choice"]:checked').value
+      const pre_prompt = action_choice == "other" ? prePromptInput.value : prompt[action_choice];
+      text_to_submit = pre_prompt ? `${pre_prompt} \n: ${inputBox.innerHTML}` : inputBox.innerHTML
+      await queryLLM(text_to_submit,model=selected_model);
+    }
+    finally{
+      spinner.style.display = "none" // remove the spinner regardless of what happened 
+    }
+  }
 
   async function get_chunk(reader,decoder){
     const { value } = await reader.read();
